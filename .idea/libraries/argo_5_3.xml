@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="argo-5.3">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/dependencies/argo-5.3.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
