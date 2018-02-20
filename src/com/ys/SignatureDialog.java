@@ -1,7 +1,6 @@
 package com.ys;
 
 import com.WacomGSS.STU.ITabletHandler;
-//import com.WacomGSS.STU.Protocol.*;
 import com.WacomGSS.STU.Protocol.*;
 import com.WacomGSS.STU.STUException;
 import com.WacomGSS.STU.Tablet;
@@ -150,9 +149,14 @@ public class SignatureDialog extends JDialog implements ITabletHandler {
             gfx.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL,
                     RenderingHints.VALUE_STROKE_PURE);
 
+            int lineWidth = 5;
+            int pressure = pd0.getPressure();
+//            gfx.setColor(new Color(0, 0, 64, 255));
+            int trans = 255 * pressure / 1024 + 100;
+            trans = trans > 255 ? 255 : trans;
+            gfx.setColor(new Color(0, 0, 64, trans));
 
-            gfx.setColor(new Color(0, 0, 64, 255));
-            gfx.setStroke(new BasicStroke(3, BasicStroke.CAP_ROUND,
+            gfx.setStroke(new BasicStroke(lineWidth, BasicStroke.CAP_ROUND,
                     BasicStroke.JOIN_ROUND));
 
             Point2D.Float pt0 = tabletToClient(pd0);
@@ -426,6 +430,13 @@ public class SignatureDialog extends JDialog implements ITabletHandler {
         }
 
         public void onPenData(PenData penData) {
+//            System.out.println("x=" + penData.getX()
+//                    + " y=" + penData.getY()
+//                    + " pressure=" + penData.getPressure()
+//                    + " Sw=" + penData.getSw()
+//                    + " Rdy=" + penData.getRdy());
+
+
             Point2D pt = tabletToScreen(penData);
 
             int btn = 0; // will be +ve if the pen is over a button.

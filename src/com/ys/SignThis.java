@@ -54,7 +54,7 @@ import java.io.IOException;
             g.fillRect(0, 0, bi.getWidth(), bi.getHeight());
             g.setComposite(AlphaComposite.Src);
             g.setColor(new Color(0, 0, 64, 255));
-            g.setStroke(new BasicStroke(3, BasicStroke.CAP_ROUND,
+            g.setStroke(new BasicStroke(5, BasicStroke.CAP_ROUND,
                     BasicStroke.JOIN_ROUND));
 
             if (null != penData) {
@@ -64,12 +64,19 @@ import java.io.IOException;
                 minY = Float.MAX_VALUE;
                 maxY = Float.MIN_VALUE;
 
+
                 for (int i = 1; i < penData.length; i++) {
                     PenData p1 = penData[i];
                     if (p1.getSw() != 0) {
                         Point2D.Float pt1 = tabletToClient(penData[i - 1], capability, imagePanel);
                         Point2D.Float pt2 = tabletToClient(penData[i], capability, imagePanel);
                         Shape l = new Line2D.Float(pt1, pt2);
+//                        g.setStroke(new BasicStroke( penData[i - 1].getPressure() / 250,
+//                                BasicStroke.CAP_ROUND,
+//                                BasicStroke.JOIN_ROUND));
+                        int trans = 255 * penData[i - 1].getPressure() / 1024 + 100;
+                        trans = trans > 200 ? 255 : trans;
+                        g.setColor(new Color(0, 0, 64, trans));
                         g.draw(l);
                         minX = pt1.x < minX ? pt1.x : minX;
                         minX = pt2.x < minX ? pt2.x : minX;
@@ -131,7 +138,7 @@ import java.io.IOException;
         }
 
         public SignThis() {
-            this.setTitle("Образец подписи");
+            this.setTitle("Подпись");
             this.setLayout(new BorderLayout());
 
             JPanel panel = new JPanel();
@@ -162,12 +169,12 @@ import java.io.IOException;
             };
 
             imagePanel.setBorder(new TitledBorder(new LineBorder(new Color(0, 0, 0)),
-                    "Образец", TitledBorder.LEADING, TitledBorder.TOP, null,
+                    "Образец", TitledBorder.LEADING, TitledBorder.BOTTOM, null,
                     Color.BLACK));
             imagePanel.setPreferredSize(new Dimension(300, 200));
 
             this.add(panel, BorderLayout.NORTH);
-            this.add(imagePanel, BorderLayout.SOUTH);
+            this.add(imagePanel, BorderLayout.CENTER);
             this.pack();
             this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         }
