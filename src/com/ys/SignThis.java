@@ -97,12 +97,16 @@ public class SignThis extends JFrame {
     }
 
     private BufferedImage getCroppedImage() {
-        BufferedImage bufferedImage = signatureImage.getSubimage((int) minX, (int) minY, (int) (maxX - minX), (int) (maxY - minY));
+
+        BufferedImage bufferedImage = signatureImage == null ? null : signatureImage.getSubimage((int) minX, (int) minY, (int) (maxX - minX), (int) (maxY - minY));
         return bufferedImage;
     }
 
     private void onGetSignature() {
         try {
+            File outputfile = new File("C:/data/sign.png");
+            if(outputfile.exists()) outputfile.delete();
+
             com.WacomGSS.STU.UsbDevice[] usbDevices = UsbDevice.getUsbDevices();
             if (usbDevices != null && usbDevices.length > 0) {
                 signatureDialog = new SignatureDialog(this,
@@ -119,8 +123,8 @@ public class SignThis extends JFrame {
                 }
                 signatureDialog.dispose();
 
-
-                File outputfile = new File("C:/data/sign.png");
+                BufferedImage bi = getCroppedImage();
+                if(null == bi) return;
                 ImageIO.write(getCroppedImage(), "png", outputfile);
             } else {
                 throw new RuntimeException("No USB tablets attached");
