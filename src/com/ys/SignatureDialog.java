@@ -351,7 +351,7 @@ public class SignatureDialog extends JDialog implements ITabletHandler {
                     this.capability.getScreenWidth(),
                     this.capability.getScreenHeight(),
                     BufferedImage.TYPE_INT_RGB);
-            {
+//            {
                 Graphics2D gfx = bitmap.createGraphics();
                 gfx.setColor(Color.WHITE);
                 gfx.fillRect(0, 0, bitmap.getWidth(), bitmap.getHeight());
@@ -381,7 +381,7 @@ public class SignatureDialog extends JDialog implements ITabletHandler {
                 }
 
                 gfx.dispose();
-            }
+//            }
 
             // Now the bitmap has been created, it needs to be converted to
             // device-native
