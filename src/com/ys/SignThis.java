@@ -11,6 +11,7 @@ import javax.swing.*;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
+import java.awt.datatransfer.StringSelection;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
@@ -104,7 +105,10 @@ public class SignThis extends JFrame {
 
     private void onGetSignature() {
         try {
-            File outputfile = new File("C:/data/sign.png");
+            String fileName = System.getProperty("java.io.tmpdir") + "sign.png";
+//            File outputfile = new File("C:/data/sign.png");
+            File outputfile = new File(fileName);
+            Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new StringSelection(fileName), null);
             if(outputfile.exists()) outputfile.delete();
 
             com.WacomGSS.STU.UsbDevice[] usbDevices = UsbDevice.getUsbDevices();
