@@ -26,6 +26,7 @@ import java.io.IOException;
 
 public class SignThis extends JFrame {
 
+    private File outputfile;
     private static final long serialVersionUID = 1L;
     private SignatureDialog signatureDialog;
     private float minX = Float.MAX_VALUE;
@@ -107,7 +108,7 @@ public class SignThis extends JFrame {
         try {
             String fileName = System.getProperty("java.io.tmpdir") + "sign.png";
 //            File outputfile = new File("C:/data/sign.png");
-            File outputfile = new File(fileName);
+            outputfile = new File(fileName);
             Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new StringSelection(fileName), null);
             if(outputfile.exists()) outputfile.delete();
 
@@ -192,8 +193,14 @@ public class SignThis extends JFrame {
         sample.setVisible(true);
     }
 
+
+
     public static void main(String[] args) {
         EventQueue.invokeLater(() -> runProgram());
+    }
+
+    protected void finalize() throws IOException {
+        outputfile.delete();
     }
 }
 

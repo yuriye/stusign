@@ -28,6 +28,7 @@ public class SignatureDialog extends JDialog implements ITabletHandler {
     private Capability capability;
     private Information information;
 
+
     // In order to simulate buttons, we have our own Button class that
     // stores the bounds and event handler.
     // Using an array of these makes it easy to add or remove buttons as
