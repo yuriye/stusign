@@ -193,8 +193,6 @@ public class SignThis extends JFrame {
         sample.setVisible(true);
     }
 
-
-
     public static void main(String[] args) {
         EventQueue.invokeLater(() -> runProgram());
     }

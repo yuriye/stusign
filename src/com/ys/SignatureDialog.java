@@ -283,7 +283,7 @@ public class SignatureDialog extends JDialog implements ITabletHandler {
                 btns[1].bounds = new java.awt.Rectangle(x, h1, w, h2);
                 btns[2].bounds = new java.awt.Rectangle(x, h1 + h2, w, h3);
             }
-            btns[0].text = "Сохранить";
+            btns[0].text = "ГОТОВО";
             btns[1].text = "Стереть";
             btns[2].text = "Отменить";
 
