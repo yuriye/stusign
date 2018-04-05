@@ -139,6 +139,10 @@ public class SignatureDialog extends JDialog implements ITabletHandler {
     }
 
     private void drawInk(Graphics2D gfx, PenData pd0, PenData pd1) {
+
+        int strokeWidth = Math.round(capability.getScreenHeight() /100.0F);
+        strokeWidth = strokeWidth < 3? 3: strokeWidth;
+
         gfx.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
         gfx.setRenderingHint(RenderingHints.KEY_RENDERING,
@@ -150,18 +154,23 @@ public class SignatureDialog extends JDialog implements ITabletHandler {
         gfx.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL,
                 RenderingHints.VALUE_STROKE_PURE);
 
-        int lineWidth = 5;
-        int pressure = pd0.getPressure();
+//        int lineWidth = 5;
+//        int pressure = pd0.getPressure();
 //            gfx.setColor(new Color(0, 0, 64, 255));
-        int trans = 255 * pressure / 1024 + 100;
-        trans = trans > 255 ? 255 : trans;
-        gfx.setColor(new Color(0, 0, 64, trans));
+//        int trans = 255 * pressure / 1024 + 100;
+//        trans = trans > 255 ? 255 : trans;
+//        gfx.setColor(new Color(0, 0, 64, trans));
 
-        gfx.setStroke(new BasicStroke(lineWidth, BasicStroke.CAP_ROUND,
+
+        gfx.setStroke(new BasicStroke(strokeWidth, BasicStroke.CAP_ROUND,
                 BasicStroke.JOIN_ROUND));
 
         Point2D.Float pt0 = tabletToClient(pd0);
         Point2D.Float pt1 = tabletToClient(pd1);
+
+        int tr = 255 * pd0.getPressure() / 1024 + 100;
+        tr = tr > 200 ? 255 : tr;
+        gfx.setColor(new Color(0, 0, 64, tr));
         Shape l = new Line2D.Float(pt0, pt1);
         gfx.draw(l);
     }

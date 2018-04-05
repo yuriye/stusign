@@ -40,23 +40,41 @@ public class SignThis extends JFrame {
 
     private Point2D.Float tabletToClient(PenData penData, Capability capability, JPanel panel) {
         // Client means the panel coordinates.
-        float koef = 2.54F;
-        return new Point2D.Float((float) penData.getX()
-                * panel.getWidth() * koef / capability.getTabletMaxX(),
-                (float) penData.getY() * panel.getHeight() * koef
-                        / capability.getTabletMaxY());
+//        float koef = 2.54F;
+//        return new Point2D.Float((float) penData.getX()
+//                * panel.getWidth() * koef / capability.getTabletMaxX(),
+//                (float) penData.getY() * panel.getHeight() * koef
+//                        / capability.getTabletMaxY());
+//        return new Point2D.Float((float) penData.getX() * panel.getWidth() / capability.getTabletMaxX(),
+//                (float) penData.getY() * panel.getHeight() / capability.getTabletMaxY());
+
+                return new Point2D.Float((float) penData.getX() * capability.getScreenWidth() / capability.getTabletMaxX(),
+                (float) penData.getY() * capability.getScreenHeight() / capability.getTabletMaxY());
 
     }
 
     private BufferedImage createImage(PenData[] penData, Capability capability, Information information) {
-        BufferedImage bi = new BufferedImage(capability.getScreenWidth(), capability.getScreenHeight(), BufferedImage.TYPE_INT_ARGB);
-        Graphics2D g = (Graphics2D) bi.getGraphics();
-        g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        int strokeWidth = Math.round(capability.getScreenHeight() /100.0F);
+        strokeWidth = strokeWidth < 3? 3: strokeWidth;
+                BufferedImage bufferedImage = new BufferedImage(capability.getScreenWidth(), capability.getScreenHeight(), BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g = (Graphics2D) bufferedImage.getGraphics();
+//        g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                RenderingHints.VALUE_ANTIALIAS_ON);
+        g.setRenderingHint(RenderingHints.KEY_RENDERING,
+                RenderingHints.VALUE_RENDER_QUALITY);
+        g.setRenderingHint(RenderingHints.KEY_ALPHA_INTERPOLATION,
+                RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY);
+        g.setRenderingHint(RenderingHints.KEY_COLOR_RENDERING,
+                RenderingHints.VALUE_COLOR_RENDER_QUALITY);
+        g.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL,
+                RenderingHints.VALUE_STROKE_PURE);
+
         g.setComposite(AlphaComposite.Clear);
-        g.fillRect(0, 0, bi.getWidth(), bi.getHeight());
+        g.fillRect(0, 0, bufferedImage.getWidth(), bufferedImage.getHeight());
         g.setComposite(AlphaComposite.Src);
         g.setColor(new Color(0, 0, 64, 255));
-        g.setStroke(new BasicStroke(5, BasicStroke.CAP_ROUND,
+        g.setStroke(new BasicStroke(strokeWidth, BasicStroke.CAP_ROUND,
                 BasicStroke.JOIN_ROUND));
 
         if (null != penData) {
@@ -95,7 +113,7 @@ public class SignThis extends JFrame {
             maxX = maxX + 5 > capability.getScreenWidth() ? capability.getScreenWidth() : maxX + 5;
             maxY = maxY + 5 > capability.getScreenHeight() ? capability.getScreenHeight() : maxY + 5;
         }
-        return bi;
+        return bufferedImage;
     }
 
     private BufferedImage getCroppedImage() {
