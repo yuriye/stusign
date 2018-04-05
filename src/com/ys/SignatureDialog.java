@@ -177,7 +177,7 @@ public class SignatureDialog extends JDialog implements ITabletHandler {
     }
 
     // Pass in the device you want to connect to!
-    public SignatureDialog(Frame frame, UsbDevice usbDevice) throws STUException {
+    public SignatureDialog(Frame frame, UsbDevice usbDevice) throws STUException, InterruptedException {
         super(frame, true);
         this.setLocation(new Point(0, 0));
         this.setLocationRelativeTo(frame);
@@ -221,14 +221,22 @@ public class SignatureDialog extends JDialog implements ITabletHandler {
             // is running, this periodically updates a slideshow of images
             // to the device.
 
-            int e = tablet.usbConnect(usbDevice, true);
-            if (e == 0) {
-                this.capability = tablet.getCapability();
-                this.information = tablet.getInformation();
-            } else {
+            int e = -1;
+            for (int i = 0; i < 10; i++) {
+                e = tablet.usbConnect(usbDevice, true);
+                if (e == 0) {
+                    break;
+                } else {
+                    Thread.sleep(1000);
+                }
+
+            }
+            if (e != 0) {
                 throw new RuntimeException(
                         "Failed to connect to USB tablet, error " + e);
             }
+            this.capability = tablet.getCapability();
+            this.information = tablet.getInformation();
 
             // Set the size of the client window to be actual size,
             // based on the reported DPI of the monitor.
@@ -353,35 +361,35 @@ public class SignatureDialog extends JDialog implements ITabletHandler {
                     this.capability.getScreenHeight(),
                     BufferedImage.TYPE_INT_RGB);
 //            {
-                Graphics2D gfx = bitmap.createGraphics();
-                gfx.setColor(Color.WHITE);
-                gfx.fillRect(0, 0, bitmap.getWidth(), bitmap.getHeight());
+            Graphics2D gfx = bitmap.createGraphics();
+            gfx.setColor(Color.WHITE);
+            gfx.fillRect(0, 0, bitmap.getWidth(), bitmap.getHeight());
 
-                double fontSize = (this.btns[0].bounds.getHeight() / 2.0); // pixels
-                gfx.setFont(new Font("Serif", Font.PLAIN, (int) fontSize));
+            double fontSize = (this.btns[0].bounds.getHeight() / 2.0); // pixels
+            gfx.setFont(new Font("Serif", Font.PLAIN, (int) fontSize));
 
-                // Draw the buttons
-                for (Button btn : this.btns) {
-                    if (useColor) {
-                        gfx.setColor(Color.LIGHT_GRAY);
-                        gfx.fillRect((int) btn.bounds.getX(),
-                                (int) btn.bounds.getY(),
-                                (int) btn.bounds.getWidth(),
-                                (int) btn.bounds.getHeight());
-                    }
-                    gfx.setColor(Color.BLACK);
-                    gfx.drawRect((int) btn.bounds.getX(),
-                            (int) btn.bounds.getY(),
-                            (int) btn.bounds.getWidth(),
-                            (int) btn.bounds.getHeight());
-                    drawCenteredString(gfx, btn.text,
-                            (int) btn.bounds.getX(),
+            // Draw the buttons
+            for (Button btn : this.btns) {
+                if (useColor) {
+                    gfx.setColor(Color.LIGHT_GRAY);
+                    gfx.fillRect((int) btn.bounds.getX(),
                             (int) btn.bounds.getY(),
                             (int) btn.bounds.getWidth(),
                             (int) btn.bounds.getHeight());
                 }
+                gfx.setColor(Color.BLACK);
+                gfx.drawRect((int) btn.bounds.getX(),
+                        (int) btn.bounds.getY(),
+                        (int) btn.bounds.getWidth(),
+                        (int) btn.bounds.getHeight());
+                drawCenteredString(gfx, btn.text,
+                        (int) btn.bounds.getX(),
+                        (int) btn.bounds.getY(),
+                        (int) btn.bounds.getWidth(),
+                        (int) btn.bounds.getHeight());
+            }
 
-                gfx.dispose();
+            gfx.dispose();
 //            }
 
             // Now the bitmap has been created, it needs to be converted to

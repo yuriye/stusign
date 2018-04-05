@@ -104,7 +104,7 @@ public class SignThis extends JFrame {
         return bufferedImage;
     }
 
-    private void onGetSignature() {
+    private void onGetSignature() throws InterruptedException {
         try {
             String fileName = System.getProperty("java.io.tmpdir") + "sign.png";
 //            File outputfile = new File("C:/data/sign.png");
@@ -135,12 +135,17 @@ public class SignThis extends JFrame {
                 throw new RuntimeException("No USB tablets attached");
             }
         } catch (STUException e) {
+            e.printStackTrace();
             JOptionPane.showMessageDialog(this, e, "Error (STU)",
                     JOptionPane.ERROR_MESSAGE);
+
         } catch (RuntimeException e) {
+            e.printStackTrace();
             JOptionPane.showMessageDialog(this, e, "Error (RT)",
                     JOptionPane.ERROR_MESSAGE);
+
         } catch (IOException e) {
+            e.printStackTrace();
             JOptionPane.showMessageDialog(this, e, "Error (IO)",
                     JOptionPane.ERROR_MESSAGE);
         }
@@ -154,7 +159,13 @@ public class SignThis extends JFrame {
         panel.setLayout(new FlowLayout());
 
         JButton btn = new JButton("Получить образец подписи");
-        btn.addActionListener(evt -> onGetSignature());
+        btn.addActionListener(evt -> {
+            try {
+                onGetSignature();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        });
         panel.add(btn);
 
         imagePanel = new JPanel() {
