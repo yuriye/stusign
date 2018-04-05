@@ -140,8 +140,8 @@ public class SignatureDialog extends JDialog implements ITabletHandler {
 
     private void drawInk(Graphics2D gfx, PenData pd0, PenData pd1) {
 
-        int strokeWidth = Math.round(capability.getScreenHeight() /100.0F);
-        strokeWidth = strokeWidth < 3? 3: strokeWidth;
+        int strokeWidth = Math.round(capability.getScreenHeight() / 100.0F);
+        strokeWidth = strokeWidth < 3 ? 3 : strokeWidth;
 
         gfx.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
@@ -153,14 +153,6 @@ public class SignatureDialog extends JDialog implements ITabletHandler {
                 RenderingHints.VALUE_COLOR_RENDER_QUALITY);
         gfx.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL,
                 RenderingHints.VALUE_STROKE_PURE);
-
-//        int lineWidth = 5;
-//        int pressure = pd0.getPressure();
-//            gfx.setColor(new Color(0, 0, 64, 255));
-//        int trans = 255 * pressure / 1024 + 100;
-//        trans = trans > 255 ? 255 : trans;
-//        gfx.setColor(new Color(0, 0, 64, trans));
-
 
         gfx.setStroke(new BasicStroke(strokeWidth, BasicStroke.CAP_ROUND,
                 BasicStroke.JOIN_ROUND));
@@ -251,11 +243,6 @@ public class SignatureDialog extends JDialog implements ITabletHandler {
             // based on the reported DPI of the monitor.
 
             int screenResolution = this.getToolkit().getScreenResolution();
-
-//                Dimension d = new Dimension(this.capability.getTabletMaxX()
-//                        * screenResolution / 2540,
-//                        this.capability.getTabletMaxY() * screenResolution
-//                                / 2540);
 
             Dimension d = new Dimension(this.capability.getTabletMaxX()
                     * screenResolution / 2540,
@@ -449,15 +436,8 @@ public class SignatureDialog extends JDialog implements ITabletHandler {
     }
 
     public void onPenData(PenData penData) {
-//            System.out.println("x=" + penData.getX()
-//                    + " y=" + penData.getY()
-//                    + " pressure=" + penData.getPressure()
-//                    + " Sw=" + penData.getSw()
-//                    + " Rdy=" + penData.getRdy());
-
 
         Point2D pt = tabletToScreen(penData);
-
         int btn = 0; // will be +ve if the pen is over a button.
         {
             for (int i = 0; i < this.btns.length; ++i) {
