@@ -109,8 +109,11 @@ public class SignThis extends JFrame {
 
     private void onGetSignature() throws InterruptedException {
         try {
+//            System.getProperties().list(System.out);
             String fileName = System.getProperty("java.io.tmpdir") + "sign.png";
             outputfile = new File(fileName);
+            outputfile.setReadable(true, false);
+            outputfile.setWritable(true, false);
             Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new StringSelection(fileName), null);
             if (outputfile.exists()) outputfile.delete();
 
