@@ -4,6 +4,8 @@
     <root id="archive" name="stusign.jar">
       <element id="module-output" name="stusign" />
       <element id="extracted-dir" path="$PROJECT_DIR$/dependencies/argo-5.3.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/dependencies/slf4j-api-1.7.25.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/dependencies/wgssSTU.jar" path-in-jar="/" />
     </root>
   </artifact>
 </component>
